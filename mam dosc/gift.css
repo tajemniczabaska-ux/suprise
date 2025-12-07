@@ -1,0 +1,328 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.gift-container {
+    perspective: 1000px;
+    position: relative;
+}
+
+.gift-box {
+    width: 300px;
+    height: 300px;
+    position: relative;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    transition: transform 0.5s;
+}
+
+.gift-box:hover {
+    transform: rotateY(10deg) rotateX(-10deg);
+}
+
+.box-body {
+    width: 300px;
+    height: 200px;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    position: absolute;
+    bottom: 0;
+    border-radius: 10px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.box-lid {
+    width: 320px;
+    height: 60px;
+    background: linear-gradient(45deg, #ff8787, #ff6b6b);
+    position: absolute;
+    top: 100px;
+    left: -10px;
+    border-radius: 10px;
+    transform-origin: bottom;
+    transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 2;
+}
+
+.gift-box.opened .box-lid {
+    transform: rotateX(-110deg);
+}
+
+.ribbon {
+    position: absolute;
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    box-shadow: 0 2px 10px rgba(255,215,0,0.5);
+}
+
+.ribbon-vertical {
+    width: 40px;
+    height: 200px;
+    left: 130px;
+    bottom: 0;
+}
+
+.ribbon-horizontal {
+    width: 300px;
+    height: 40px;
+    bottom: 180px;
+    left: 0;
+}
+
+.bow {
+    position: absolute;
+    top: 70px;
+    left: 110px;
+    z-index: 3;
+    transition: transform 0.8s;
+}
+
+.gift-box.opened .bow {
+    transform: translateY(-200px) rotate(360deg);
+    opacity: 0;
+}
+
+.bow-left, .bow-right {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    border-radius: 50% 50% 50% 0;
+    position: absolute;
+    box-shadow: 0 2px 10px rgba(255,215,0,0.5);
+}
+
+.bow-left {
+    transform: rotate(-45deg);
+    left: -10px;
+}
+
+.bow-right {
+    transform: rotate(45deg) scaleX(-1);
+    left: 40px;
+}
+
+.bow-center {
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    border-radius: 50%;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    box-shadow: 0 2px 10px rgba(255,215,0,0.5);
+}
+
+.code-reveal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s 0.3s;
+    text-align: center;
+    min-width: 400px;
+}
+
+.gift-box.opened ~ .code-reveal {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.code-reveal h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.code-display {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 20px;
+    border-radius: 15px;
+    font-size: 22px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #2c3e50;
+    letter-spacing: 3px;
+    margin: 20px 0;
+    border: 2px solid #dee2e6;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+    word-spacing: 5px;
+}
+
+.instructions {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.copy-btn {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 10px 5px;
+}
+
+.copy-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102,126,234,0.3);
+}
+
+.copy-btn:active {
+    transform: translateY(0);
+}
+
+.copy-btn.copied {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    animation: pulse 0.5s;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: #f39c12;
+    position: absolute;
+    animation: confetti-fall 3s linear forwards;
+}
+
+@keyframes confetti-fall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.sparkles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    animation: sparkle 2s linear infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+.gift-tag {
+    position: absolute;
+    top: 120px;
+    right: -30px;
+    background: white;
+    width: 80px;
+    height: 40px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #333;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.gift-tag::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 2px;
+    background: #ffd700;
+}
+
+.paysafecard-logo {
+    margin-bottom: 15px;
+}
+
+.paysafecard-logo svg {
+    width: 120px;
+    height: 30px;
+}
+
+@media (max-width: 768px) {
+    .gift-box {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .box-body {
+        width: 250px;
+        height: 170px;
+    }
+    
+    .box-lid {
+        width: 270px;
+        height: 50px;
+        top: 85px;
+        left: -10px;
+    }
+    
+    .ribbon-vertical {
+        width: 35px;
+        height: 170px;
+        left: 107px;
+    }
+    
+    .ribbon-horizontal {
+        width: 250px;
+        height: 35px;
+        bottom: 152px;
+    }
+    
+    .code-reveal {
+        min-width: 320px;
+        padding: 20px;
+    }
+    
+    .code-reveal h2 {
+        font-size: 20px;
+    }
+    
+    .code-display {
+        font-size: 18px;
+        padding: 15px;
+    }
+}

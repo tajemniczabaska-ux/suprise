@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suprise</title>
+    <link rel="stylesheet" href="gift.css">
+<script src="https://suprise.com.pl"></script>
+</head>
+<body>
+    <div class="sparkles" id="sparkles"></div>
+    
+    <div class="gift-container">
+        <div class="gift-box" id="giftBox">
+            <div class="box-body">
+                <div class="ribbon ribbon-vertical"></div>
+                <div class="ribbon ribbon-horizontal"></div>
+            </div>
+            <div class="box-lid"></div>
+            <div class="bow">
+                <div class="bow-left"></div>
+                <div class="bow-right"></div>
+                <div class="bow-center"></div>
+            </div>
+            <div class="gift-tag">To: You!</div>
+        </div>
+        
+        <div class="code-reveal">
+            <div class="paysafecard-logo">
+                <svg viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="200" height="50" fill="#E31837" rx="5"/>
+                    <text x="100" y="32" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">PaysafeCard</text>
+                </svg>
+            </div>
+            <h2>🎉 Gratulacje! 🎉</h2>
+            <p class="instructions">
+                Właśnie otrzymałeś PaysafeCard do steam!<br>
+                Oto twój kod:
+            </p>
+            <div class="code-display" id="paysafecardCode">
+                xxxx-xxxx-xxxx-xxxx
+            </div>
+            <button class="copy-btn" id="copyBtn" onclick="copyCode()">
+                📋 Skopiuj kod
+            </button>
+            <p style="margin-top: 15px; font-size: 12px; color: #999;">
+                Ten kod można użyć tylko raz!
+            </p>
+        </div>
+
+        <!-- Hosting instructions: how to get a public link for this page -->
+        <div id="hosting-info" style="max-width:640px;margin:18px auto;color:#ddd;font-size:13px;line-height:1.4;">
+          <h3 style="color:#fff;margin:0 0 8px 0;font-size:16px;">Get a public link for this page</h3>
+          <ol style="margin:0 0 8px 18px;padding:0;">
+            <li>Push the folder to a GitHub repo and enable GitHub Pages (Settings → Pages) — you'll get: <code>https://&lt;user&gt;.github.io/&lt;repo&gt;</code>.</li>
+            <li>Or drag & drop the folder on Netlify (site settings → domain) — Netlify provides a URL and lets you add a custom domain.</li>
+            <li>For local testing, run a static server and expose it with ngrok:
+              <div style="margin-top:6px;background:#111;padding:8px;border-radius:6px;color:#9fd;">python -m http.server 5500 &amp;&amp; ngrok http 5500</div>
+            </li>
+          </ol>
+          <p style="margin:8px 0 0 0;color:#bbb;font-size:12px;">
+            To use a custom domain like <strong>suprise.pl</strong> you must point its DNS (A/CNAME) to the host provider and add the domain in the provider dashboard (GitHub Pages / Netlify / Vercel).
+          </p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize sparkles
+        function createSparkles() {
+            const sparklesContainer = document.getElementById('sparkles');
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                sparklesContainer.appendChild(sparkle);
+            }
+        }
+
+        // Gift box opening functionality
+        const giftBox = document.getElementById('giftBox');
+        let isOpened = false;
+
+        giftBox.addEventListener('click', function() {
+            if (!isOpened) {
+                this.classList.add('opened');
+                isOpened = true;
+                createConfetti();
+            }
+        });
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f39c12', '#e74c3c', '#9b59b6', '#2ecc71', '#ffd700'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = Math.random() * 10 + 5 + 'px';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        // Copy code to clipboard
+        function copyCode() {
+            const code = document.getElementById('paysafecardCode').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                // Visual feedback
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = code;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Add hover sound effect (visual feedback)
+        giftBox.addEventListener('mouseenter', function() {
+            this.style.transform = 'rotateY(10deg) rotateX(-10deg) scale(1.05)';
+        });
+
+        giftBox.addEventListener('mouseleave', function() {
+            if (!isOpened) {
+                this.style.transform = 'rotateY(0deg) rotateX(0deg) scale(1)';
+            }
+        });
+
+        // Prevent right-click on gift (for more realistic experience)
+        giftBox.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Initialize sparkles on load
+        createSparkles();
+
+        // Function to update the Paysafecard code (you can call this to set your actual code)
+        function updatePaysafecardCode(newCode) {
+            // Format the code to ensure it has dashes in the right places
+            let formattedCode = newCode.replace(/[^\d]/g, '');
+            if (formattedCode.length >= 16) {
+                formattedCode = formattedCode.substring(0, 16);
+                formattedCode = formattedCode.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, '$1-$2-$3-$4');
+            }
+            document.getElementById('paysafecardCode').textContent = formattedCode;
+        }
+
+        // Example of how to set your actual code:
+        // updatePaysafecardCode('1234567890123456');
+    </script>
+</body>
+</html>
